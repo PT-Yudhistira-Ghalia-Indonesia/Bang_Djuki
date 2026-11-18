@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Lab Sejarah & Toponimi Indonesia | IPS Kelas VII</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & Merriweather untuk nuansa museum/arkeologi modern -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Merriweather"', 'serif'],
+                    },
+                    colors: {
+                        nusantara: {
+                            50: '#fdf8f3',
+                            100: '#faeee1',
+                            200: '#f4d9be',
+                            300: '#ecbd91',
+                            400: '#e2985d',
+                            500: '#da7c38',
+                            600: '#cc642a',
+                            700: '#a94d24',
+                            800: '#873e24',
+                            900: '#6e3420',
+                            950: '#3b190f',
+                        },
+                        batu: {
+                            850: '#1e242b',
+                            900: '#161b20',
+                            950: '#0f1317',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Kustomisasi scrollbar & transisi halus */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f4;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e;
+        }
+        .tab-panel {
+            animation: fadeIn 0.35s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Range Slider Kustom untuk Mesin Waktu Bogor */
+        input[type=range].timeline-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type=range].timeline-slider::-webkit-slider-runnable-track {
+            height: 10px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #b45309 0%, #d97706 50%, #059669 100%);
+        }
+        input[type=range].timeline-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            margin-top: -7px;
+            background-color: #ffffff;
+            border: 4px solid #b45309;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.15s ease;
+        }
+        input[type=range].timeline-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+        /* Mode Sorotan Guru (Memperbesar teks & kontras saat diproyeksikan di kelas) */
+        body.teacher-spotlight {
+            font-size: 112%;
+        }
+        body.teacher-spotlight .spotlight-hide {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans antialiased selection:bg-amber-200 selection:text-amber-950">
+
+    <!-- Notifikasi Toast / Message Box (Pengganti alert()) -->
+    <div id="toast-box" class="fixed bottom-5 right-5 z-50 hidden transform transition-all duration-300 translate-y-4 opacity-0">
+        <div class="bg-stone-900 text-white px-5 py-3.5 rounded-2xl shadow-xl border border-stone-700 flex items-center gap-3 max-w-md">
+            <i id="toast-icon" data-lucide="info" class="w-5 h-5 text-amber-400 shrink-0"></i>
+            <p id="toast-message" class="text-sm font-medium leading-snug"></p>
+        </div>
+    </div>
+
+    <!-- HEADER & NAVIGASI UTAMA -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3 gap-3">
+                <!-- Brand & Judul Bab -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-700 to-amber-900 text-amber-50 flex items-center justify-center shadow-md shrink-0">
+                            <i data-lucide="compass" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Virtual Lab IPS • Kelas VII</span>
+                                <span class="text-xs text-stone-400 hidden sm:inline">Bab 1: Mahir IPS 1</span>
+                            </div>
+                            <h1 class="font-serif font-bold text-base sm:text-lg text-stone-900 leading-tight mt-0.5">
+                                Konsep Dasar Sejarah, Sejarah Lokal & Toponimi
+                            </h1>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Mode Presentasi Guru (Mobile) -->
+                    <button onclick="toggleSpotlightMode()" class="md:hidden p-2.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 transition" title="Mode Presentasi Kelas">
+                        <i data-lucide="presentation" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Kontrol Presentasi & Layar Penuh (Desktop) -->
+                <div class="hidden md:flex items-center gap-2">
+                    <button id="btn-spotlight" onclick="toggleSpotlightMode()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition">
+                        <i data-lucide="presentation" class="w-4 h-4 text-amber-700"></i>
+                        <span id="spotlight-label">Mode Sorotan Guru</span>
+                    </button>
+                    <button onclick="toggleFullScreen()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-stone-900 text-white hover:bg-stone-800 transition shadow-sm">
+                        <i data-lucide="maximize-2" class="w-4 h-4"></i>
+                        <span>Layar Penuh</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navigasi 4 Tab Laboratorium -->
+            <nav class="flex overflow-x-auto no-scrollbar gap-1.5 pb-2.5 pt-1" aria-label="Navigasi Modul Virtual Lab">
+                <button onclick="switchTab('tab1')" id="nav-tab1" class="nav-btn active flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all bg-amber-800 text-white shadow-sm">
+                    <i data-lucide="microscope" class="w-4 h-4"></i>
+                    <span>1. Lab Sumber & Unsur Sejarah</span>
+                </button>
+                <button onclick="switchTab('tab2')" id="nav-tab2" class="nav-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all bg-stone-100 text-stone-600 hover:bg-stone-200">
+                    <i data-lucide="history" class="w-4 h-4"></i>
+                    <span>2. Linimasa Sejarah Lokal</span>
+                </button>
+                <button onclick="switchTab('tab3')" id="nav-tab3" class="nav-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all bg-stone-100 text-stone-600 hover:bg-stone-200">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                    <span>3. Detektif Toponimi</span>
+                </button>
+                <button onclick="switchTab('tab4')" id="nav-tab4" class="nav-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all bg-stone-100 text-stone-600 hover:bg-stone-200">
+                    <i data-lucide="hourglass" class="w-4 h-4"></i>
+                    <span>4. 3 Dimensi Waktu & Kuis</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- KONTEN UTAMA -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- ===================================================================== -->
+        <!-- TAB 1: LABORATORIUM SUMBER & UNSUR SEJARAH                            -->
+        <!-- ===================================================================== -->
+        <section id="tab1" class="tab-panel space-y-8">
+            <!-- Pengantar Ringkas & Etimologi -->
+            <div class="bg-gradient-to-r from-amber-900 via-stone-900 to-stone-800 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+                    <div class="lg:col-span-2 space-y-3">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-semibold">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Ruang Inspeksi Arkeologi & Historiografi
+                        </span>
+                        <h2 class="font-serif text-2xl sm:text-3xl font-bold leading-snug">
+                            Bagaimana Sejarawan Membuktikan Masa Lampau?
+                        </h2>
+                        <p class="text-stone-300 text-sm sm:text-base leading-relaxed">
+                            Kata sejarah berasal dari bahasa Arab <strong class="text-amber-300"><em>syajaratun</em></strong> ("pohon" atau "keturunan") yang melambangkan pertumbuhan berkesinambungan, serta bahasa Yunani <strong class="text-amber-300"><em>historia</em></strong> ("penyelidikan"). Klik artefak di bawah ini untuk membedah <strong>5 Unsur Sejarah</strong> dan jenis sumbernya!
+                        </p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 space-y-2 text-xs">
+                        <p class="font-bold text-amber-300 uppercase tracking-wider">4 Ruang Lingkup Sejarah:</p>
+                        <ul class="space-y-1.5 text-stone-200">
+                            <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">•</span><span><strong>Peristiwa:</strong> Kejadian nyata, unik, & berdampak besar.</span></li>
+                            <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">•</span><span><strong>Kisah:</strong> Narasi/cerita lisan maupun tulisan.</span></li>
+                            <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">•</span><span><strong>Ilmu:</strong> Objektif, empiris, metode ilmiah.</span></li>
+                            <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">•</span><span><strong>Seni:</strong> Gaya bahasa, imajinasi, & estetika penyajian.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meja Inspeksi Digital (4 Bukti Sejarah) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Daftar Pilihan Artefak (Kiri) -->
+                <div class="lg:col-span-5 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-stone-900 text-lg flex items-center gap-2">
+                            <i data-lucide="layers" class="w-5 h-5 text-amber-700"></i>
+                            Meja Inspeksi Bukti Sejarah
+                        </h3>
+                        <span class="text-xs text-stone-500">Pilih 1 objek untuk dibedah</span>
+                    </div>
+
+                    <div id="artifact-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
+                        <!-- Diisi oleh JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Kaca Pembesar Analisis (Kanan) -->
+                <div class="lg:col-span-7 bg-white rounded-3xl border border-stone-200 shadow-sm p-6 sm:p-7 flex flex-col justify-between">
+                    <div id="artifact-inspector">
+                        <!-- Konten Dinamis Artefak Terpilih -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mini-Simulasi Interaktif: Uji Logika Kronologi -->
+            <div class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-100 pb-5 mb-6">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Simulasi Ciri Sejarah: Kronologis & Diakronis</span>
+                        <h3 class="font-serif text-xl font-bold text-stone-900 mt-1">Lab Susun Kronologi Sejarah Nusantara</h3>
+                        <p class="text-sm text-stone-600 mt-1">
+                            Kronologi diperlukan agar urutan peristiwa dari awal hingga akhir tidak keliru. Klik peristiwa di bawah ini secara berurutan dari <strong>yang paling awal (tertua)</strong> hingga <strong>paling akhir</strong>!
+                        </p>
+                    </div>
+                    <button onclick="resetChronologyGame()" class="self-start md:self-center px-4 py-2 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200 text-stone-700 flex items-center gap-1.5 transition">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Acak Ulang
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Kartu Acak -->
+                    <div class="space-y-2.5">
+                        <p class="text-xs font-bold uppercase text-stone-400 tracking-wider">1. Klik Kartu Peristiwa Sesuai Urutan Waktu:</p>
+                        <div id="chrono-pool" class="space-y-2.5"></div>
+                    </div>
+
+                    <!-- Jalur Linimasa Hasil Susunan Siswa -->
+                    <div class="bg-stone-50 rounded-2xl p-4 border border-dashed border-stone-300 flex flex-col justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase text-amber-800 tracking-wider mb-3 flex items-center gap-1.5">
+                                <i data-lucide="git-commit-horizontal" class="w-4 h-4"></i>
+                                2. Jalur Kronologi Hasil Susunanmu:
+                            </p>
+                            <div id="chrono-result" class="space-y-2 min-h-[180px]">
+                                <p class="text-xs text-stone-400 italic py-10 text-center">Belum ada peristiwa dipilih. Klik kartu di sebelah kiri untuk mulai menyusun urutan waktu.</p>
+                            </div>
+                        </div>
+                        <div id="chrono-feedback" class="mt-4 hidden p-3.5 rounded-xl text-xs font-medium"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- TAB 2: LINIMASA SEJARAH LOKAL NUSANTARA                               -->
+        <!-- ===================================================================== -->
+        <section id="tab2" class="tab-panel hidden space-y-8">
+            <!-- Header Tab 2 -->
+            <div class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Periodisasi & Jejak Daerah</span>
+                        <h2 class="font-serif text-2xl font-bold text-stone-900 mt-1">Peta Waktu Sejarah Lokal: Praaksara hingga Kerajaan Islam</h2>
+                        <p class="text-sm text-stone-600 mt-1 max-w-3xl">
+                            Sejarah lokal mengkaji peristiwa, tokoh, dan kehidupan masyarakat di wilayah tertentu sebagai fondasi sejarah nasional. Pilih era di bawah ini untuk menelusuri perkembangannya.
+                        </p>
+                    </div>
+                    <!-- Tombol Pilih Era -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="selectEra('praaksara')" id="era-btn-praaksara" class="era-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-amber-800 text-white shadow-sm transition">
+                            1. Masa Praaksara
+                        </button>
+                        <button onclick="selectEra('hindubuddha')" id="era-btn-hindubuddha" class="era-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 transition">
+                            2. Kerajaan Hindu-Buddha
+                        </button>
+                        <button onclick="selectEra('islam')" id="era-btn-islam" class="era-btn px-4 py-2.5 rounded-xl text-xs font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 transition">
+                            3. Kerajaan Islam
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Konten Dinamis Era Sejarah Lokal -->
+                <div id="era-content" class="mt-6 pt-6 border-t border-stone-100">
+                    <!-- Diisi oleh JS -->
+                </div>
+            </div>
+
+            <!-- Tabel Interaktif Perbandingan Lintas Zaman (Tabel 1.6 & 1.8 Naskah) -->
+            <div class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Analisis Perubahan & Keberlanjutan</span>
+                        <h3 class="font-serif text-xl font-bold text-stone-900 mt-1">Komparator Kehidupan Masyarakat Lintas Zaman</h3>
+                        <p class="text-sm text-stone-600">Pilih aspek kehidupan untuk membandingkan kondisi dari Masa Praaksara, Masa Kerajaan, hingga Masa Kini.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5" id="aspect-filters">
+                        <button onclick="renderComparisonAspect('tempat')" class="aspect-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-700 text-white transition" data-aspect="tempat">Tempat Tinggal</button>
+                        <button onclick="renderComparisonAspect('pencaharian')" class="aspect-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 transition" data-aspect="pencaharian">Mata Pencaharian</button>
+                        <button onclick="renderComparisonAspect('alat')" class="aspect-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 transition" data-aspect="alat">Alat Kerja</button>
+                        <button onclick="renderComparisonAspect('sosial')" class="aspect-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-stone-100 text-stone-700 hover:bg-stone-200 transition" data-aspect="sosial">Pemerintahan & Sosial</button>
+                    </div>
+                </div>
+
+                <div id="comparison-cards" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Diisi oleh JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- TAB 3: DETEKTIF TOPONIMI WILAYAH                                      -->
+        <!-- ===================================================================== -->
+        <section id="tab3" class="tab-panel hidden space-y-8">
+            <!-- Mesin Waktu Toponimi Bogor (1482 - 1950) -->
+            <div class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700">
+                            <i data-lucide="compass" class="w-4 h-4"></i> Studi Kasus Garis Waktu Toponimi (Tabel 1.9)
+                        </span>
+                        <h2 class="font-serif text-2xl font-bold text-stone-900 mt-1">Mesin Waktu Transformasi Nama Kota Bogor (1482–1950)</h2>
+                        <p class="text-sm text-stone-600 mt-1">
+                            Geser pengatur waktu atau klik titik tahun untuk melihat bagaimana perubahan kekuasaan politik dan budaya memengaruhi penamaan wilayah Bogor.
+                        </p>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-200 px-4 py-2.5 rounded-2xl shrink-0">
+                        <span class="text-xs text-amber-800 font-medium block">Tahun Terpilih:</span>
+                        <span id="bogor-year-badge" class="font-serif text-xl font-bold text-amber-950">1482 M</span>
+                    </div>
+                </div>
+
+                <!-- Slider Interaktif -->
+                <div class="bg-stone-50 p-5 rounded-2xl border border-stone-200 mb-6">
+                    <input type="range" id="bogor-slider" min="0" max="6" value="0" step="1" class="w-full timeline-slider" oninput="updateBogorTimeline(this.value)">
+                    <div class="grid grid-cols-7 text-center text-[10px] sm:text-xs font-bold text-stone-500 mt-3 gap-1">
+                        <button onclick="setBogorStep(0)" class="hover:text-amber-800 transition">1482</button>
+                        <button onclick="setBogorStep(1)" class="hover:text-amber-800 transition">1689</button>
+                        <button onclick="setBogorStep(2)" class="hover:text-amber-800 transition">1745</button>
+                        <button onclick="setBogorStep(3)" class="hover:text-amber-800 transition">1752</button>
+                        <button onclick="setBogorStep(4)" class="hover:text-amber-800 transition">1905</button>
+                        <button onclick="setBogorStep(5)" class="hover:text-amber-800 transition">1942</button>
+                        <button onclick="setBogorStep(6)" class="hover:text-amber-800 transition">1950</button>
+                    </div>
+                </div>
+
+                <!-- Tampilan Detail Step Bogor -->
+                <div id="bogor-detail-card" class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+                    <!-- Diisi JS -->
+                </div>
+
+                <!-- 4 Hipotesis Asal-Usul Kata Bogor -->
+                <div class="mt-6 pt-6 border-t border-stone-100">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-3">4 Hipotesis Asal-Usul Kata "Bogor" (Catatan Pemkab Bogor):</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                        <div class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
+                            <span class="font-bold text-amber-800 block mb-1">1. Buitenzorg → Bogor</span>
+                            <p class="text-stone-600">Perubahan pengucapan lidah masyarakat lokal dari istilah Belanda <em>Buitenzorg</em> ("tanpa kekhawatiran").</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
+                            <span class="font-bold text-amber-800 block mb-1">2. Bokor → Bogor</span>
+                            <p class="text-stone-600">Berasal dari kata <em>bokor</em> yang merujuk pada tunggul pohon enau/kawung atau wadah air.</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
+                            <span class="font-bold text-amber-800 block mb-1">3. Bahai / Baqar → Bogor</span>
+                            <p class="text-stone-600">Berasal dari kata bahasa Arab <em>baqar</em> yang berarti sapi (dikaitkan dengan patung sapi di Kebun Raya).</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-stone-50 border border-stone-200">
+                            <span class="font-bold text-amber-800 block mb-1">4. Kampung Bogor</span>
+                            <p class="text-stone-600">Merujuk langsung pada permukiman pribumi <em>Kampung Bogor</em> yang sudah tercatat dalam dokumen 7 April 1752.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Eksplorasi Kamus Toponimi Nusantara -->
+            <div class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Topos (Tempat) + Onoma (Nama)</span>
+                        <h3 class="font-serif text-xl font-bold text-stone-900 mt-1">Kamus Detektif Toponimi Wilayah Indonesia</h3>
+                        <p class="text-sm text-stone-600">Klik kartu wilayah berikut untuk mengungkap jejak geografi, linguistik, dan sejarah di balik namanya.</p>
+                    </div>
+                    <select id="toponimi-filter" onchange="filterToponimi(this.value)" class="px-4 py-2.5 rounded-xl border border-stone-300 text-xs font-bold text-stone-700 bg-stone-50 focus:outline-none focus:ring-2 focus:ring-amber-600">
+                        <option value="all">Semua Kategori Toponimi</option>
+                        <option value="sungai">Toponimi Sungai & Air (Ci-)</option>
+                        <option value="kota">Toponimi Kota & Permukiman</option>
+                        <option value="alam">Toponimi Gunung & Alam</option>
+                    </select>
+                </div>
+
+                <div id="toponimi-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Diisi JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- TAB 4: SIMULASI 3 DIMENSI WAKTU & KUIS CEK PEMAHAMAN                  -->
+        <!-- ===================================================================== -->
+        <section id="tab4" class="tab-panel hidden space-y-8">
+            <!-- Simulasi Interaktif 3 Dimensi Waktu -->
+            <div class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+                <div class="max-w-3xl mb-6">
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-700">Subbab E: Hubungan Dimensi Waktu</span>
+                    <h2 class="font-serif text-2xl font-bold text-stone-900 mt-1">Laboratorium Simulasi: Jaga Makna Nama Tempat</h2>
+                    <p class="text-sm text-stone-600 mt-1">
+                        Masa lampau memberi makna melalui nama tempat, <strong>masa kini bertugas menjaga maknanya</strong>, dan masa depan mewujudkannya. Pilih objek toponimi dan tentukan tindakan generasi masa kini!
+                    </p>
+                </div>
+
+                <!-- Pilihan Skenario & Tombol Keputusan -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <div class="lg:col-span-4 space-y-4 bg-stone-50 p-5 rounded-2xl border border-stone-200">
+                        <div>
+                            <label class="text-xs font-bold uppercase text-stone-500 block mb-2">1. Pilih Warisan Toponimi:</label>
+                            <div class="grid grid-cols-1 gap-2">
+                                <button onclick="setSimScenario('sungai')" id="sim-scen-sungai" class="sim-scen-btn text-left p-3 rounded-xl border-2 border-amber-700 bg-amber-50 text-amber-950 font-bold text-xs transition">
+                                    🌊 Sungai Ciherang / Ciliwung ("Air Jernih & Sungai Berkelok")
+                                </button>
+                                <button onclick="setSimScenario('hutan')" id="sim-scen-hutan" class="sim-scen-btn text-left p-3 rounded-xl border border-stone-200 bg-white text-stone-700 hover:bg-stone-100 font-bold text-xs transition">
+                                    🌳 Cibinong & Bogor ("Pohon Binong & Daerah Rimbun Sejuk")
+                                </button>
+                                <button onclick="setSimScenario('situs')" id="sim-scen-situs" class="sim-scen-btn text-left p-3 rounded-xl border border-stone-200 bg-white text-stone-700 hover:bg-stone-100 font-bold text-xs transition">
+                                    🪨 Prasasti Batutulis ("Batu Bertulis Peninggalan Pajajaran")
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-stone-200">
+                            <label class="text-xs font-bold uppercase text-stone-500 block mb-2">2. Pilih Tindakan Generasi Masa Kini:</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="setSimAction('jaga')" id="sim-act-jaga" class="p-3 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-sm transition flex flex-col items-center gap-1 text-center">
+                                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                                    <span>Lestarikan & Jaga Makna</span>
+                                </button>
+                                <button onclick="setSimAction('rusak')" id="sim-act-rusak" class="p-3 rounded-xl bg-stone-200 text-stone-700 hover:bg-rose-100 hover:text-rose-800 font-bold text-xs transition flex flex-col items-center gap-1 text-center">
+                                    <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                                    <span>Abaikan & Eksploitasi</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visualisasi Rantai 3 Waktu (Lampau -> Kini -> Depan) -->
+                    <div id="sim-chain-display" class="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Diisi oleh JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kuis Evaluasi Interaktif (Berdasarkan Asesmen Formatif & Sumatif Bab 1) -->
+            <div class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-100 pb-5 mb-6">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Uji Pemahaman Konsep (Asesmen Formatif)</span>
+                        <h3 class="font-serif text-xl font-bold text-stone-900 mt-1">Kuis Cepat Sejarawan Muda</h3>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-bold px-3.5 py-2 rounded-xl bg-amber-100 text-amber-900">
+                            Skor: <span id="quiz-score">0</span> / 5
+                        </span>
+                        <button onclick="resetQuiz()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200 text-stone-700 transition">
+                            Ulangi Kuis
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quiz-container" class="space-y-6">
+                    <!-- Diisi oleh JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-stone-900 text-stone-400 py-8 mt-12 border-t border-stone-800 spotlight-hide">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+            <div class="flex items-center gap-2.5">
+                <i data-lucide="book-open" class="w-4 h-4 text-amber-500"></i>
+                <span>Disusun berdasarkan Naskah <strong>Mahir Ilmu Pengetahuan Sosial 1 untuk SMP/MTs Kelas VII (Bab 1)</strong></span>
+            </div>
+            <p class="text-stone-500">Media Pembelajaran Interaktif • Sejarah & Toponimi Nusantara</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIKA & DATA INTERAKTIF -->
+    <script>
+        // =========================================================================
+        // 1. DATA BERBASIS NASKAH BAB 1 MAHIR IPS 1 KELAS VII
+        // =========================================================================
+
+        // Data Artefak Tab 1
+        const artifactsData = [
+            {
+                id: 'yupa',
+                title: 'Prasasti Yupa (Kerajaan Kutai)',
+                badge: 'Sumber Tertulis • Primer',
+                badgeColor: 'bg-amber-100 text-amber-900 border-amber-300',
+                icon: 'scroll-text',
+                era: 'Abad ke-4 atau ke-5 Masehi',
+                summary: 'Tugu batu bertulis aksara Pallawa dan bahasa Sanskerta dari Muara Kaman, tepi Sungai Mahakam, Kalimantan Timur. Menandai berakhirnya masa praaksara di Nusantara.',
+                unsur: {
+                    manusia: 'Raja Kudungga, Aswawarman, Mulawarman, dan kaum Brahmana.',
+                    ruang: 'Muara Kaman, tepi Sungai Mahakam, Kalimantan Timur.',
+                    waktu: 'Abad ke-4 hingga ke-5 Masehi (awal masa sejarah Indonesia).',
+                    kronologi: 'Muncul setelah tradisi lisan masa praaksara berakhir, mengawali tradisi tulis kerajaan Hindu.',
+                    perubahan: 'Peralihan sistem kepemimpinan dari kepala suku menjadi sistem pemerintahan kerajaan.'
+                },
+                statusSumber: 'Sumber Primer & Tertulis — dibuat langsung pada masa peristiwa berlangsung sebagai bukti autentik.'
+            },
+            {
+                id: 'fosil',
+                title: 'Fosil Manusia Purba Sangiran & Trinil',
+                badge: 'Sumber Benda • Artefak/Fosil',
+                badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+                icon: 'bone',
+                era: 'Sekitar 2 Juta – 500.000 Tahun Lalu',
+                summary: 'Sisa tulang-belulang manusia purba (Meganthropus paleojavanicus di Sangiran & Pithecanthropus erectus di Trinil) yang mengungkap kehidupan sebelum dikenalnya tulisan.',
+                unsur: {
+                    manusia: 'Meganthropus paleojavanicus, Pithecanthropus erectus, hingga Homo wajakensis.',
+                    ruang: 'Lembah Bengawan Solo (Sangiran di Jawa Tengah, Trinil & Ngandong di Jawa Timur).',
+                    waktu: 'Masa Praaksara (sekitar 2 juta tahun lalu hingga sebelum abad ke-4 M).',
+                    kronologi: 'Tahap berburu dan meramu tingkat awal sebelum manusia mengenal bercocok tanam.',
+                    perubahan: 'Evolusi fisik (mulai berjalan tegak) dan adaptasi teknologi alat batu kasar.'
+                },
+                statusSumber: 'Sumber Benda (Material) — bukti fisik purba karena belum ada catatan tertulis pada zaman tersebut.'
+            },
+            {
+                id: 'babad',
+                title: 'Naskah Kuno Babad Tanah Jawi & Tradisi Lisan',
+                badge: 'Sumber Tertulis / Lisan • Kisah',
+                badgeColor: 'bg-sky-100 text-sky-900 border-sky-300',
+                icon: 'book-marked',
+                era: 'Masa Kerajaan Islam di Jawa',
+                summary: 'Karya sastra sejarah dan tradisi tutur yang merekam silsilah raja-raja serta perkembangan masyarakat Jawa dari masa Hindu-Buddha hingga kerajaan Islam.',
+                unsur: {
+                    manusia: 'Pujangga keraton, para raja Mataram, Wali Sanga, dan masyarakat Jawa.',
+                    ruang: 'Wilayah Jawa Tengah dan Jawa Timur (pusat-pusat kerajaan lokal).',
+                    waktu: 'Periode perkembangan kerajaan-kerajaan Islam (abad ke-15 hingga ke-18 M).',
+                    kronologi: 'Menghubungkan kesinambungan cerita dari era Majapahit menuju Demak dan Mataram Islam.',
+                    perubahan: 'Akulturasi budaya lokal dan Hindu-Buddha dengan nilai-nilai ajaran Islam.'
+                },
+                statusSumber: 'Sejarah sebagai Kisah — memerlukan kritik sumber (verifikasi) agar fakta sejarah terpisah dari unsur mitos.'
+            },
+            {
+                id: 'lukisan',
+                title: 'Lukisan Penangkapan Pangeran Diponegoro',
+                badge: 'Sejarah sebagai Seni & Peristiwa',
+                badgeColor: 'bg-purple-100 text-purple-900 border-purple-300',
+                icon: 'palette',
+                era: 'Perang Diponegoro (1825–1830)',
+                summary: 'Karya maestro Raden Saleh yang menggambarkan ketegasan Pangeran Diponegoro saat ditangkap Belanda di Magelang pada akhir Perang Jawa.',
+                unsur: {
+                    manusia: 'Pangeran Diponegoro, Jenderal De Kock, pengikut Diponegoro, dan pelukis Raden Saleh.',
+                    ruang: 'Magelang, Jawa Tengah (wilayah konflik Perang Diponegoro).',
+                    waktu: 'Tahun 1830 (akhir Perang Diponegoro yang berlangsung 1825–1830).',
+                    kronologi: 'Puncak perlawanan rakyat Jawa terhadap kolonialisme Belanda sebelum era pergerakan modern.',
+                    perubahan: 'Menumbuhkan kesadaran harga diri bangsa dan inspirasi perlawanan terhadap penindasan.'
+                },
+                statusSumber: 'Sejarah sebagai Seni — memadukan fakta peristiwa sejarah dengan ekspresi emosional dan estetika visual.'
+            }
+        ];
+
+        // Data Game Kronologi Tab 1
+        const chronologyItems = [
+            { id: 'c1', order: 1, year: '± 2 Juta – 500.000 Tahun Lalu', text: 'Kehidupan manusia purba Pithecanthropus erectus di Trinil pada masa berburu dan meramu.' },
+            { id: 'c2', order: 2, year: 'Abad ke-4 – 5 Masehi', text: 'Penulisan Prasasti Yupa di Kerajaan Kutai menandai berakhirnya masa praaksara di Nusantara.' },
+            { id: 'c3', order: 3, year: 'Abad ke-8 – 14 Masehi', text: 'Kejayaan kerajaan Hindu-Buddha seperti Mataram Kuno (Borobudur) dan Majapahit (Sumpah Palapa).' },
+            { id: 'c4', order: 4, year: 'Abad ke-13 – 16 Masehi', text: 'Berkembangnya kerajaan Islam seperti Samudra Pasai dan Demak melalui perdagangan dan dakwah.' },
+            { id: 'c5', order: 5, year: '20 Mei 1908 & 17 Agustus 1945', text: 'Lahirnya organisasi modern Budi Utomo hingga Proklamasi Kemerdekaan Indonesia.' }
+        ];
+        let currentPool = [];
+        let selectedSequence = [];
+
+        // Data Tab 2: Era Sejarah Lokal
+        const erasData = {
+            praaksara: {
+                title: 'Masa Praaksara di Indonesia (Sebelum Abad ke-4 M)',
+                subtitle: 'Pra (sebelum) + Aksara (tulisan) — Manusia beradaptasi dengan alam dan menghasilkan alat kehidupan.',
+                highlights: [
+                    {
+                        head: '1. Berburu & Mengumpulkan Makanan',
+                        desc: 'Hidup berpindah-pindah (nomaden) di gua/tepi sungai, bergantung pada alam. Peninggalan: Kapak perimbas (Kebudayaan Pacitan) & alat tulang (Ngandong).'
+                    },
+                    {
+                        head: '2. Masa Bercocok Tanam',
+                        desc: 'Mulai hidup menetap, menghasilkan makanan sendiri, dan mengenal kepercayaan roh nenek moyang. Peninggalan: Kapak lonjong, kapak persegi, gerabah.'
+                    },
+                    {
+                        head: '3. Masa Perundagian',
+                        desc: 'Memiliki keahlian khusus mengolah logam, pembagian kerja, dan perdagangan antarpulau. Peninggalan: Kapak corong, nekara, bejana perunggu.'
+                    }
+                ],
+                figures: 'Jenis Manusia Purba: Meganthropus paleojavanicus (Sangiran), Pithecanthropus erectus (Trinil), dan Homo soloensis serta Homo wajakensis (cikal bakal ras Austronesia).'
+            },
+            hindubuddha: {
+                title: 'Masa Kerajaan Hindu-Buddha (Abad ke-4 – 15 M)',
+                subtitle: 'Masuk melalui jalur perdagangan, pendeta, bangsawan, maupun arus balik pelajar Nusantara, lalu berpadu dengan budaya lokal.',
+                highlights: [
+                    {
+                        head: 'Kutai & Tarumanegara (Abad ke-4–6 M)',
+                        desc: 'Kutai di tepi Sungai Mahakam (Prasasti Yupa) & Tarumanegara di Jawa Barat di bawah Raja Purnawarman (Prasasti Tugu & irigasi Sungai Gomati).'
+                    },
+                    {
+                        head: 'Sriwijaya & Mataram Kuno (Abad ke-7–13 M)',
+                        desc: 'Sriwijaya di Palembang sebagai pusat maritim & Buddha Mahayana; Mataram Kuno mewariskan Candi Borobudur (Syailendra) & Prambanan (Sanjaya).'
+                    },
+                    {
+                        head: 'Singasari & Majapahit (1222–1500 M)',
+                        desc: 'Singasari mencapai puncak di masa Kertanegara; Majapahit menyatukan Nusantara di bawah Hayam Wuruk dan Sumpah Palapa Mahapatih Gajah Mada.'
+                    }
+                ],
+                figures: 'Bukti Akulturasi: Seni bangunan candi, aksara Pallawa-Sanskerta, sistem pemerintahan raja, dan karya sastra seperti Kitab Negarakertagama.'
+            },
+            islam: {
+                title: 'Masa Kerajaan Islam di Indonesia (Mulai Abad ke-13 M)',
+                subtitle: 'Menyebar secara damai melalui perdagangan, perkawinan, pendidikan pesantren, seni budaya, dan dakwah ulama (Teori Arab, Gujarat, Persia).',
+                highlights: [
+                    {
+                        head: 'Samudra Pasai & Aceh Darussalam',
+                        desc: 'Kerajaan Islam pertama di Aceh dengan mata uang emas dirham; Aceh Darussalam jaya di bawah Sultan Iskandar Muda sebagai pusat ilmu agama.'
+                    },
+                    {
+                        head: 'Demak, Mataram Islam & Banten',
+                        desc: 'Demak didirikan Raden Patah dengan dukungan Wali Sanga; Sultan Agung Mataram menciptakan Kalender Jawa-Islam; Banten maju di bawah Sultan Ageng Tirtayasa.'
+                    },
+                    {
+                        head: 'Gowa-Tallo, Ternate & Tidore',
+                        desc: 'Pusat perdagangan rempah dan penyebaran Islam di Indonesia Timur (Sulawesi Selatan, Maluku, hingga Papua) dengan tokoh gigih seperti Sultan Hasanuddin.'
+                    }
+                ],
+                figures: 'Warisan Budaya Hidup: Masjid kuno, aksara Arab-Melayu/Jawi, seni ukir, wayang, gamelan, serta tradisi selamatan dan kenduri.'
+            }
+        };
+
+        // Data Komparator Lintas Zaman (Tabel 1.6 & 1.8)
+        const comparisonData = {
+            tempat: [
+                { era: 'Masa Praaksara', detail: 'Gua-gua alam dan tepi sungai; pola hidup berpindah-pindah (nomaden) mengikuti sumber makanan.', icon: 'tent' },
+                { era: 'Kerajaan Hindu-Buddha', detail: 'Permukiman tetap berkelompok di sekitar lembah sungai subur dan pusat pemerintahan kerajaan.', icon: 'landmark' },
+                { era: 'Kerajaan Islam', detail: 'Desa dan kota bandar perdagangan berkembang pesat dengan keraton sebagai pusat pemerintahan.', icon: 'building-2' },
+                { era: 'Masa Kini', detail: 'Kota dan desa tertata secara administratif dengan rumah tinggal permanen dan infrastruktur modern.', icon: 'home' }
+            ],
+            pencaharian: [
+                { era: 'Masa Praaksara', detail: 'Berburu hewan liar dan mengumpulkan makanan (meramu) langsung dari hutan dan perairan.', icon: 'trees' },
+                { era: 'Kerajaan Hindu-Buddha', detail: 'Pertanian menetap dengan sistem irigasi teratur serta perdagangan antardaerah.', icon: 'wheat' },
+                { era: 'Kerajaan Islam', detail: 'Pertanian, perdagangan maritim antarpulau/internasional (jalur rempah), serta kerajinan.', icon: 'ship' },
+                { era: 'Masa Kini', detail: 'Pertanian modern, sektor industri, jasa, ekonomi kreatif, dan perdagangan global berbasis digital.', icon: 'globe' }
+            ],
+            alat: [
+                { era: 'Masa Praaksara', detail: 'Alat sederhana dari batu kasar/halus (kapak perimbas, kapak persegi), tulang hewan, dan kayu.', icon: 'hammer' },
+                { era: 'Kerajaan Hindu-Buddha', detail: 'Peralatan logam, teknologi arsitektur batu candi, serta saluran irigasi seperti Sungai Gomati.', icon: 'wrench' },
+                { era: 'Kerajaan Islam', detail: 'Alat logam, kapal layar niaga pinisi/jung, serta tradisi tulis aksara Arab-Melayu dan Jawi.', icon: 'compass' },
+                { era: 'Masa Kini', detail: 'Mesin industri otomatis, teknologi komputer/digital, internet, dan transportasi cepat.', icon: 'cpu' }
+            ],
+            sosial: [
+                { era: 'Masa Praaksara', detail: 'Kelompok kecil dipimpin kepala suku yang dipilih berdasarkan kekuatan dan kewibawaan.', icon: 'users' },
+                { era: 'Kerajaan Hindu-Buddha', detail: 'Sistem monarki dipimpin raja secara turun-temurun; tumbuh gotong royong membangun fasilitas umum.', icon: 'crown' },
+                { era: 'Kerajaan Islam', detail: 'Kesultanan dipimpin sultan dibantu ulama; akulturasi budaya dan solidaritas sosial sangat kuat.', icon: 'shield' },
+                { era: 'Masa Kini', detail: 'Negara demokrasi dengan pemimpin dipilih rakyat; semangat gotong royong dan toleransi tetap dijaga.', icon: 'scale' }
+            ]
+        };
+
+        // Data Tab 3: Mesin Waktu Bogor (Tabel 1.9)
+        const bogorTimeline = [
+            {
+                year: '1482 M',
+                name: 'Pakuan / Pakuan Pajajaran',
+                actor: 'Sri Baduga Maharaja (Prabu Siliwangi)',
+                event: 'Sri Baduga Maharaja dinobatkan sebagai Raja Sunda/Pajajaran pada 3 Juni 1482 (yang kemudian diperingati sebagai Hari Jadi Bogor).',
+                toponimiNote: 'Pakuan dikenal sebagai pusat pemerintahan Kerajaan Sunda Pajajaran. K.F. Holle (1869) menghubungkan nama Pakuan dengan daerah Cipaku dan pohon paku.'
+            },
+            {
+                year: '1689 – 1701 M',
+                name: 'Kampung Baru',
+                actor: 'Tanujiwa (Hoofd van Kampung Baru)',
+                event: 'Setelah runtuhnya Pakuan (1579) dan ekspedisi VOC Scipio (1687), Tanujiwa membuka permukiman baru di sekitar hulu Sungai Ciliwung pada 1689.',
+                toponimiNote: 'Muncul nama Kampung Baru beserta kampung-kampung bersejarah lainnya seperti Parakan Panjang, Panaragan, Bantar Jati, Sempur, dan Baranang Siang.'
+            },
+            {
+                year: '1745 – 1746 M',
+                name: 'Buitenzorg',
+                actor: 'Gubernur Jenderal Gustaaf Willem Baron van Imhoff',
+                event: 'Van Imhoff menggabungkan sembilan permukiman pribumi dengan kawasan peristirahatan Belanda yang kelak menjadi Istana Bogor.',
+                toponimiNote: 'Muncul nama administratif kolonial "Buitenzorg" (bahasa Belanda yang berarti "tanpa kekhawatiran" atau tempat yang tenang).'
+            },
+            {
+                year: '7 April 1752',
+                name: 'Negorij Bogor / Kampung Bogor',
+                actor: 'Masyarakat Pribumi & Administrasi Lokal',
+                event: 'Dokumen resmi bertanggal 7 April 1752 mencatat jabatan "Hoofd van de Negorij Bogor" (Kepala Kampung Bogor) berdampingan dengan Buitenzorg.',
+                toponimiNote: 'Membuktikan bahwa nama asli "Bogor" sudah hidup dan digunakan masyarakat setempat jauh sebelum masa kemerdekaan.'
+            },
+            {
+                year: '1905 M',
+                name: 'Gemeente Buitenzorg',
+                actor: 'Pemerintah Kolonial Hindia Belanda',
+                event: 'Berdasarkan Staatsblad No. 208 tahun 1905, Buitenzorg ditetapkan sebagai daerah otonom berbentuk kota (Gemeente).',
+                toponimiNote: 'Penggunaan nama Buitenzorg menguat dalam tata pemerintahan kota kolonial, sementara Kebun Raya Bogor (berdiri 1817) terus berkembang.'
+            },
+            {
+                year: '1942 – 1945 M',
+                name: 'Bogor (Masa Pendudukan Jepang)',
+                actor: 'Pemerintahan Masa Pendudukan Jepang',
+                event: 'Berakhirnya kekuasaan kolonial Belanda digantikan oleh pendudukan Jepang di Indonesia.',
+                toponimiNote: 'Istilah administratif berbahasa Belanda seperti Buitenzorg mulai dihapus dan digantikan secara luas dengan nama Bogor.'
+            },
+            {
+                year: '1950 – Sekarang',
+                name: 'Kota Bogor (Republik Indonesia)',
+                actor: 'Pemerintah Republik Indonesia',
+                event: 'Melalui Undang-Undang No. 16 Tahun 1950, Bogor resmi dibentuk sebagai daerah kota besar dalam Negara Kesatuan Republik Indonesia.',
+                toponimiNote: 'Nama Kota Bogor lestari hingga kini dengan julukan Kota Hujan yang sejuk, asri, serta menjaga situs Prasasti Batutulis.'
+            }
+        ];
+
+        // Data Kamus Toponimi Tab 3
+        const toponimiList = [
+            { name: 'Sungai Ciliwung', cat: 'sungai', origin: 'Bahasa Sunda: Ci (air/sungai) + Liwung (melengkung/berkelok)', meaning: 'Sungai yang alirannya berkelok-kelok melewati wilayah Bogor hingga Jakarta.', lesson: 'Mengingatkan warga untuk menjaga kebersihan dan daerah aliran sungai agar tidak banjir.' },
+            { name: 'Cibinong', cat: 'sungai', origin: 'Bahasa Sunda: Ci (sungai) + Binong (nama pohon besar)', meaning: 'Kawasan sungai yang di tepinya banyak ditumbuhi pohon Binong.', lesson: 'Menjadi pengingat pentingnya pelestarian vegetasi pohon asli daerah meski kota berkembang.' },
+            { name: 'Citeureup', cat: 'sungai', origin: 'Bahasa Sunda: Ci (sungai) + Teureup (nama ikan/pohon)', meaning: 'Sungai tempat hidupnya ikan teureup atau tumbuhnya pohon teureup.', lesson: 'Menunjukkan kekayaan keanekaragaman hayati perairan masa lampau.' },
+            { name: 'Sungai Ciherang', cat: 'sungai', origin: 'Bahasa Sunda: Ci (air/sungai) + Herang (jernih/bening)', meaning: 'Sungai yang airnya sangat jernih dan bersih.', lesson: 'Kewajiban generasi masa kini menjaga air sungai tetap jernih sesuai arti namanya.' },
+            { name: 'Batutulis (Bogor)', cat: 'kota', origin: 'Batu yang bertuliskan / bersurat', meaning: 'Lokasi ditemukannya prasasti peninggalan Kerajaan Pajajaran (Prabu Siliwangi) tahun 1533 M.', lesson: 'Bukti bahwa peristiwa dan artefak sejarah menjadi penanda abadi identitas tempat.' },
+            { name: 'Jakarta', cat: 'kota', origin: 'Sunda Kelapa → Jayakarta (1527) → Batavia → Jakarta', meaning: 'Jayakarta berarti "kemenangan yang gemilang" setelah Pangeran Fatahillah merebut Sunda Kelapa.', lesson: 'Menunjukkan dinamika perubahan nama tempat seiring perubahan kekuasaan sejarah.' },
+            { name: 'Surabaya', cat: 'kota', origin: 'Simbolik Sura (ikan hiu) dan Baya (buaya)', meaning: 'Melambangkan keberanian menghadapi bahaya serta pertarungan kekuatan laut dan darat.', lesson: 'Tradisi lisan dan simbol lokal memperkuat karakter serta kebanggaan warga kota.' },
+            { name: 'Kota Solo (Surakarta)', cat: 'kota', origin: 'Berasal dari nama Desa Sala', meaning: 'Desa Sala dipilih sebagai lokasi pemindahan keraton Mataram yang kemudian berkembang menjadi Kota Solo.', lesson: 'Perubahan pelafalan lokal dari "Sala" menjadi "Solo" yang tetap melekat hingga kini.' },
+            { name: 'Gampong Pande & Nagari Pariangan', cat: 'kota', origin: 'Istilah Gampong (Aceh) & Nagari (Minangkabau)', meaning: 'Satuan permukiman tradisional yang merekam struktur sosial dan bahasa daerah setempat.', lesson: 'Studi toponimi menjaga kekayaan linguistik dan kosakata daerah Nusantara.' },
+            { name: 'Gunung Merapi', cat: 'alam', origin: 'Meru (gunung) + Api (berapi)', meaning: 'Kawasan gunung berapi aktif di perbatasan Jawa Tengah dan Yogyakarta.', lesson: 'Meningkatkan kesadaran ekologis dan kewaspadaan masyarakat terhadap potensi erupsi.' }
+        ];
+
+        // Data Simulasi 3 Dimensi Waktu Tab 4
+        const simulationScenarios = {
+            sungai: {
+                title: 'Sungai Ciherang ("Sungai Berair Jernih")',
+                past: 'Leluhur mengamati aliran sungai yang sangat jernih, bersih, dan menjadi sumber kehidupan warga sehingga menamainya Ciherang.',
+                jaga: {
+                    present: 'Warga tidak membuang sampah ke sungai, menjaga pepohonan di bantaran sungai, dan mengolah limbah rumah tangga.',
+                    future: 'Anak cucu di masa depan tetap menikmati air sungai yang jernih, sehat, dan bebas banjir. Nama Ciherang tetap sesuai kenyataan!'
+                },
+                rusak: {
+                    present: 'Sungai dijadikan tempat pembuangan sampah plastik dan limbah pabrik tanpa pengolahan.',
+                    future: 'Air sungai berubah hitam, berbau, dan memicu banjir. Nama "Ciherang" (air jernih) hanya tinggal bunyi tanpa makna.'
+                }
+            },
+            hutan: {
+                title: 'Cibinong & Bogor ("Pohon Binong & Wilayah Rimbun Sejuk")',
+                past: 'Nenek moyang menamai wilayah ini berdasarkan keasrian hutan, banyaknya pohon Binong, dan udara sejuk yang menenangkan.',
+                jaga: {
+                    present: 'Pembangunan kota diimbangi ruang terbuka hijau, hutan kota, dan penanaman kembali pohon-pohon asli daerah.',
+                    future: 'Generasi mendatang mewarisi kota modern yang tetap sejuk, asri, dan kaya keanekaragaman hayati.'
+                },
+                rusak: {
+                    present: 'Alih fungsi lahan dan penebangan pohon dilakukan besar-besaran tanpa memikirkan keseimbangan alam.',
+                    future: 'Suhu udara memanas, pohon Binong punah dari wilayahnya sendiri, dan bencana ekologis mengancam generasi penerus.'
+                }
+            },
+            situs: {
+                title: 'Situs Prasasti Batutulis ("Warisan Kerajaan Pajajaran")',
+                past: 'Prasasti batu bertulis dibuat untuk mengenang jasa Sri Baduga Maharaja dalam membangun parit pertahanan dan telaga.',
+                jaga: {
+                    present: 'Situs dirawat kebersihannya, dilindungi dari vandalisme, dan dipelajari pelajar sebagai sumber sejarah lokal.',
+                    future: 'Generasi masa depan memiliki pegangan jati diri, bangga pada budaya daerah, dan meneladani kepemimpinan leluhur.'
+                },
+                rusak: {
+                    present: 'Situs bersejarah dibiarkan terbengkalai, dicoret-coret, atau digusur demi kepentingan komersial semata.',
+                    future: 'Jembatan penghubung antara generasi muda dengan akar sejarahnya terputus; masyarakat kehilangan identitas daerah.'
+                }
+            }
+        };
+        let currentSimScenario = 'sungai';
+        let currentSimAction = 'jaga';
+
+        // Data Kuis Tab 4 (Dari Asesmen Formatif Bab 1)
+        const quizQuestions = [
+            {
+                q: '1. Urutan peristiwa sejarah yang disusun secara runtut berdasarkan waktu terjadinya dari awal hingga akhir disebut ....',
+                options: ['A. Kronologi', 'B. Interpretasi', 'C. Periodisasi', 'D. Verifikasi'],
+                answer: 0,
+                explanation: 'Tepat! Kronologi adalah penyusunan urutan peristiwa berdasarkan waktu terjadinya agar alur sejarah tidak keliru.'
+            },
+            {
+                q: '2. Prasasti Yupa dari Kerajaan Kutai di Kalimantan Timur dibuat langsung pada masa peristiwa berlangsung sehingga termasuk jenis sumber ....',
+                options: ['A. Sumber sekunder dan lisan', 'B. Sumber primer dan tertulis', 'C. Sumber lisan dan benda', 'D. Sumber sekunder dan audiovisual'],
+                answer: 1,
+                explanation: 'Benar! Prasasti Yupa menggunakan aksara Pallawa dan bahasa Sanskerta (tertulis) serta berasal langsung dari zamannya (primer).'
+            },
+            {
+                q: '3. Nama-nama tempat di Jawa Barat seperti Ciliwung, Cibinong, dan Ciherang diawali suku kata "Ci-" yang memiliki makna ....',
+                options: ['A. Bukit atau pegunungan', 'B. Hutan yang lebat', 'C. Air atau sungai', 'D. Tanah yang subur'],
+                answer: 2,
+                explanation: 'Tepat sekali! Dalam bahasa Sunda, awalan "Ci-" berasal dari kata cai yang berarti air atau sungai.'
+            },
+            {
+                q: '4. Masa ketika manusia belum mengenal sistem tulisan untuk mencatat peristiwa kehidupannya disebut masa ....',
+                options: ['A. Sejarah modern', 'B. Praaksara', 'C. Kolonialisme', 'D. Reformasi'],
+                answer: 1,
+                explanation: 'Benar! Praaksara berasal dari kata pra (sebelum) dan aksara (tulisan).'
+            },
+            {
+                q: '5. Apa peran utama generasi masa kini dalam hubungan tiga dimensi waktu (lampau, kini, depan) terkait toponimi?',
+                options: [
+                    'A. Mengganti semua nama tempat lama dengan bahasa asing',
+                    'B. Melupakan sejarah lama agar fokus pada teknologi saja',
+                    'C. Memahami dan menjaga makna nama tempat agar tetap sesuai kenyataan bagi masa depan',
+                    'D. Mengeksploitasi alam tanpa memedulikan nama wilayahnya'
+                ],
+                answer: 2,
+                explanation: 'Sangat tepat! Masa kini berperan sebagai penjaga dan penerus warisan agar makna nama tempat tetap nyata bagi generasi mendatang.'
+            }
+        ];
+        let userAnswers = new Array(quizQuestions.length).fill(null);
+
+        // =========================================================================
+        // 2. FUNGSI NAVIGASI & UTILITAS UI
+        // =========================================================================
+
+        function showToast(msg, iconName = 'info') {
+            const box = document.getElementById('toast-box');
+            const msgEl = document.getElementById('toast-message');
+            const iconEl = document.getElementById('toast-icon');
+            msgEl.textContent = msg;
+            iconEl.setAttribute('data-lucide', iconName);
+            lucide.createIcons();
+
+            box.classList.remove('hidden');
+            setTimeout(() => {
+                box.classList.remove('translate-y-4', 'opacity-0');
+            }, 10);
+
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                box.classList.add('translate-y-4', 'opacity-0');
+                setTimeout(() => box.classList.add('hidden'), 300);
+            }, 3500);
+        }
+
+        function switchTab(tabId) {
+            // Sembunyikan semua panel
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            // Tampilkan panel terpilih
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // Update gaya tombol navigasi
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-800', 'text-white', 'shadow-sm', 'font-bold');
+                btn.classList.add('bg-stone-100', 'text-stone-600', 'font-semibold');
+            });
+            const activeBtn = document.getElementById('nav-' + tabId);
+            activeBtn.classList.remove('bg-stone-100', 'text-stone-600', 'font-semibold');
+            activeBtn.classList.add('bg-amber-800', 'text-white', 'shadow-sm', 'font-bold');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleSpotlightMode() {
+            document.body.classList.toggle('teacher-spotlight');
+            const isActive = document.body.classList.contains('teacher-spotlight');
+            const label = document.getElementById('spotlight-label');
+            if (label) {
+                label.textContent = isActive ? 'Keluar Mode Sorotan' : 'Mode Sorotan Guru';
+            }
+            showToast(
+                isActive ? 'Mode Sorotan Guru aktif: Ukuran teks diperbesar untuk presentasi kelas.' : 'Mode Sorotan Guru dinonaktifkan.',
+                'presentation'
+            );
+        }
+
+        function toggleFullScreen() {
+            try {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    }
+                }
+            } catch (err) {
+                showToast('Gunakan tombol F11 pada keyboard untuk mode layar penuh.', 'maximize-2');
+            }
+        }
+
+        // =========================================================================
+        // 3. RENDER TAB 1: MEJA INSPEKSI ARTEFAK & GAME KRONOLOGI
+        // =========================================================================
+
+        function renderArtifactList(selectedId = 'yupa') {
+            const listContainer = document.getElementById('artifact-list');
+            listContainer.innerHTML = artifactsData.map(item => {
+                const isSelected = item.id === selectedId;
+                return `
+                    <button onclick="inspectArtifact('${item.id}')" class="text-left p-4 rounded-2xl border transition-all flex items-start gap-3.5 ${
+                        isSelected
+                        ? 'bg-amber-50/90 border-amber-600 shadow-sm ring-2 ring-amber-600/20'
+                        : 'bg-white border-stone-200 hover:border-amber-400 hover:bg-stone-50'
+                    }">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                            isSelected ? 'bg-amber-800 text-white' : 'bg-stone-100 text-stone-600'
+                        }">
+                            <i data-lucide="${item.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-md border mb-1 ${item.badgeColor}">
+                                ${item.badge}
+                            </span>
+                            <h4 class="font-bold text-sm text-stone-900 leading-snug">${item.title}</h4>
+                            <p class="text-xs text-stone-500 mt-0.5">${item.era}</p>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function inspectArtifact(id) {
+            renderArtifactList(id);
+            const item = artifactsData.find(a => a.id === id);
+            const inspector = document.getElementById('artifact-inspector');
+
+            inspector.innerHTML = `
+                <div class="space-y-5 animate-fadeIn">
+                    <div class="flex flex-wrap items-start justify-between gap-3 border-b border-stone-100 pb-4">
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-lg border ${item.badgeColor} mb-2">
+                                <i data-lucide="search-check" class="w-3.5 h-3.5"></i> ${item.badge}
+                            </span>
+                            <h3 class="font-serif text-xl sm:text-2xl font-bold text-stone-900">${item.title}</h3>
+                            <p class="text-xs font-semibold text-amber-800 mt-0.5">Periode: ${item.era}</p>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-stone-700 leading-relaxed bg-stone-50 p-4 rounded-2xl border border-stone-200/80">
+                        ${item.summary}
+                    </p>
+
+                    <div>
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-3 flex items-center gap-1.5">
+                            <i data-lucide="puzzle" class="w-4 h-4 text-amber-700"></i>
+                            Bedah 5 Unsur Sejarah pada Bukti Ini:
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-200/70">
+                                <span class="font-bold text-amber-950 block mb-1">1. Unsur Manusia (Pelaku):</span>
+                                <p class="text-stone-700 leading-relaxed">${item.unsur.manusia}</p>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-200/70">
+                                <span class="font-bold text-amber-950 block mb-1">2. Unsur Ruang (Tempat):</span>
+                                <p class="text-stone-700 leading-relaxed">${item.unsur.ruang}</p>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-200/70">
+                                <span class="font-bold text-amber-950 block mb-1">3. Unsur Waktu:</span>
+                                <p class="text-stone-700 leading-relaxed">${item.unsur.waktu}</p>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-200/70">
+                                <span class="font-bold text-amber-950 block mb-1">4. Unsur Kronologi:</span>
+                                <p class="text-stone-700 leading-relaxed">${item.unsur.kronologi}</p>
+                            </div>
+                            <div class="sm:col-span-2 p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200">
+                                <span class="font-bold text-emerald-950 block mb-1">5. Unsur Perubahan & Makna:</span>
+                                <p class="text-stone-700 leading-relaxed">${item.unsur.perubahan}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-stone-900 text-stone-200 text-xs flex items-start gap-2.5">
+                        <i data-lucide="badge-check" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+                        <span><strong>Verifikasi Sumber:</strong> ${item.statusSumber}</span>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // Game Kronologi
+        function resetChronologyGame() {
+            selectedSequence = [];
+            currentPool = [...chronologyItems].sort(() => Math.random() - 0.5);
+            renderChronologyGame();
+        }
+
+        function selectChronoCard(id) {
+            const card = currentPool.find(c => c.id === id);
+            if (!card) return;
+            currentPool = currentPool.filter(c => c.id !== id);
+            selectedSequence.push(card);
+            renderChronologyGame();
+        }
+
+        function renderChronologyGame() {
+            const poolEl = document.getElementById('chrono-pool');
+            const resEl = document.getElementById('chrono-result');
+            const fbEl = document.getElementById('chrono-feedback');
+
+            if (currentPool.length === 0) {
+                poolEl.innerHTML = `<div class="p-4 rounded-2xl bg-stone-100 text-xs text-stone-500 text-center">Semua peristiwa telah dipindahkan ke jalur kronologi.</div>`;
+            } else {
+                poolEl.innerHTML = currentPool.map(c => `
+                    <button onclick="selectChronoCard('${c.id}')" class="w-full text-left p-3.5 rounded-2xl bg-white border border-stone-200 hover:border-amber-600 hover:bg-amber-50/50 transition flex items-center justify-between gap-3 group shadow-sm">
+                        <span class="text-xs sm:text-sm font-medium text-stone-800">${c.text}</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-stone-100 group-hover:bg-amber-700 group-hover:text-white text-[11px] font-bold text-stone-600 shrink-0 transition">
+                            Pilih →
+                        </span>
+                    </button>
+                `).join('');
+            }
+
+            if (selectedSequence.length === 0) {
+                resEl.innerHTML = `<p class="text-xs text-stone-400 italic py-10 text-center">Belum ada peristiwa dipilih. Klik kartu di sebelah kiri untuk mulai menyusun urutan waktu.</p>`;
+                fbEl.classList.add('hidden');
+            } else {
+                resEl.innerHTML = selectedSequence.map((c, idx) => {
+                    const isCorrectPos = c.order === idx + 1;
+                    return `
+                        <div class="p-3 rounded-xl border text-xs flex items-start gap-2.5 ${
+                            isCorrectPos ? 'bg-emerald-50 border-emerald-300 text-emerald-950' : 'bg-rose-50 border-rose-300 text-rose-950'
+                        }">
+                            <span class="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[11px] shrink-0 ${
+                                isCorrectPos ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white'
+                            }">${idx + 1}</span>
+                            <div>
+                                <span class="font-bold block">${c.year} ${isCorrectPos ? '✓' : '(Urutan kurang tepat)'}</span>
+                                <span>${c.text}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                if (selectedSequence.length === chronologyItems.length) {
+                    const allCorrect = selectedSequence.every((c, idx) => c.order === idx + 1);
+                    fbEl.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-amber-100', 'text-amber-900');
+                    if (allCorrect) {
+                        fbEl.classList.add('bg-emerald-100', 'text-emerald-900');
+                        fbEl.innerHTML = '<strong>Luar Biasa!</strong> Kamu berhasil menyusun kronologi sejarah Nusantara secara runtut dari masa praaksara hingga kemerdekaan.';
+                    } else {
+                        fbEl.classList.add('bg-amber-100', 'text-amber-900');
+                        fbEl.innerHTML = '<strong>Hampir Tepat!</strong> Perhatikan kartu berwarna merah. Klik tombol <em>Acak Ulang</em> di kanan atas untuk mencoba menyusunnya kembali sesuai urutan waktu.';
+                    }
+                }
+            }
+        }
+
+        // =========================================================================
+        // 4. RENDER TAB 2: ERA SEJARAH LOKAL & KOMPARATOR LINTAS ZAMAN
+        // =========================================================================
+
+        function selectEra(eraKey) {
+            document.querySelectorAll('.era-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-800', 'text-white', 'shadow-sm');
+                btn.classList.add('bg-stone-100', 'text-stone-700');
+            });
+            const active = document.getElementById('era-btn-' + eraKey);
+            active.classList.remove('bg-stone-100', 'text-stone-700');
+            active.classList.add('bg-amber-800', 'text-white', 'shadow-sm');
+
+            const data = erasData[eraKey];
+            document.getElementById('era-content').innerHTML = `
+                <div class="space-y-5">
+                    <div>
+                        <h3 class="font-serif text-xl font-bold text-stone-900">${data.title}</h3>
+                        <p class="text-sm text-stone-600 mt-1">${data.subtitle}</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        ${data.highlights.map(h => `
+                            <div class="p-4 rounded-2xl bg-amber-50/50 border border-amber-200/80 space-y-1.5">
+                                <h4 class="font-bold text-sm text-amber-950">${h.head}</h4>
+                                <p class="text-xs text-stone-700 leading-relaxed">${h.desc}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="p-4 rounded-2xl bg-stone-900 text-stone-200 text-xs flex items-center gap-3">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-amber-400 shrink-0"></i>
+                        <span>${data.figures}</span>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function renderComparisonAspect(aspectKey) {
+            document.querySelectorAll('.aspect-btn').forEach(btn => {
+                if (btn.dataset.aspect === aspectKey) {
+                    btn.classList.remove('bg-stone-100', 'text-stone-700');
+                    btn.classList.add('bg-emerald-700', 'text-white');
+                } else {
+                    btn.classList.remove('bg-emerald-700', 'text-white');
+                    btn.classList.add('bg-stone-100', 'text-stone-700');
+                }
+            });
+
+            const list = comparisonData[aspectKey];
+            document.getElementById('comparison-cards').innerHTML = list.map((item, idx) => `
+                <div class="p-4 rounded-2xl border ${idx === 3 ? 'bg-emerald-50/70 border-emerald-300' : 'bg-stone-50 border-stone-200'} flex flex-col justify-between gap-3">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider ${idx === 3 ? 'text-emerald-800' : 'text-amber-800'}">Tahap ${idx + 1}</span>
+                            <i data-lucide="${item.icon}" class="w-4 h-4 ${idx === 3 ? 'text-emerald-700' : 'text-stone-500'}"></i>
+                        </div>
+                        <h4 class="font-bold text-sm text-stone-900 mb-1.5">${item.era}</h4>
+                        <p class="text-xs text-stone-600 leading-relaxed">${item.detail}</p>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // =========================================================================
+        // 5. RENDER TAB 3: MESIN WAKTU BOGOR & KAMUS TOPONIMI
+        // =========================================================================
+
+        function setBogorStep(stepIndex) {
+            document.getElementById('bogor-slider').value = stepIndex;
+            updateBogorTimeline(stepIndex);
+        }
+
+        function updateBogorTimeline(stepIndex) {
+            const item = bogorTimeline[parseInt(stepIndex)];
+            document.getElementById('bogor-year-badge').textContent = item.year;
+
+            document.getElementById('bogor-detail-card').innerHTML = `
+                <div class="p-5 rounded-2xl bg-gradient-to-br from-amber-800 to-amber-950 text-white flex flex-col justify-between">
+                    <div>
+                        <span class="text-[11px] uppercase tracking-wider text-amber-300 font-bold">Nama Wilayah Resmi / Populer</span>
+                        <h3 class="font-serif text-2xl font-bold mt-1">${item.name}</h3>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-white/15 text-xs text-amber-100">
+                        <span class="block text-amber-300 font-semibold">Tokoh / Otoritas Terkait:</span>
+                        ${item.actor}
+                    </div>
+                </div>
+                <div class="p-5 rounded-2xl bg-stone-50 border border-stone-200 space-y-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1.5">
+                        <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-700"></i> Peristiwa Sejarah (${item.year})
+                    </span>
+                    <p class="text-sm text-stone-800 leading-relaxed">${item.event}</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-emerald-700"></i> Makna & Kaitan Toponimi
+                    </span>
+                    <p class="text-sm text-stone-800 leading-relaxed">${item.toponimiNote}</p>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function filterToponimi(category) {
+            const filtered = category === 'all'
+                ? toponimiList
+                : toponimiList.filter(t => t.cat === category);
+
+            document.getElementById('toponimi-grid').innerHTML = filtered.map(t => `
+                <div class="p-5 rounded-2xl bg-stone-50 hover:bg-amber-50/60 border border-stone-200 hover:border-amber-400 transition space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-serif font-bold text-base text-stone-900">${t.name}</h4>
+                        <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-md bg-white border border-stone-200 text-stone-600">
+                            ${t.cat === 'sungai' ? 'Perairan' : t.cat === 'kota' ? 'Permukiman' : 'Bentang Alam'}
+                        </span>
+                    </div>
+                    <p class="text-xs font-semibold text-amber-800">${t.origin}</p>
+                    <p class="text-xs text-stone-700 leading-relaxed">${t.meaning}</p>
+                    <div class="pt-2 border-t border-stone-200/80 text-[11px] text-emerald-800 font-medium flex items-start gap-1.5">
+                        <i data-lucide="leaf" class="w-3.5 h-3.5 shrink-0 mt-0.5"></i>
+                        <span>${t.lesson}</span>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // =========================================================================
+        // 6. RENDER TAB 4: SIMULASI 3 DIMENSI WAKTU & KUIS FORMATIF
+        // =========================================================================
+
+        function setSimScenario(scenKey) {
+            currentSimScenario = scenKey;
+            document.querySelectorAll('.sim-scen-btn').forEach(btn => {
+                btn.classList.remove('border-2', 'border-amber-700', 'bg-amber-50', 'text-amber-950');
+                btn.classList.add('border', 'border-stone-200', 'bg-white', 'text-stone-700');
+            });
+            const active = document.getElementById('sim-scen-' + scenKey);
+            active.classList.remove('border', 'border-stone-200', 'bg-white', 'text-stone-700');
+            active.classList.add('border-2', 'border-amber-700', 'bg-amber-50', 'text-amber-950');
+            renderSimulationChain();
+        }
+
+        function setSimAction(actKey) {
+            currentSimAction = actKey;
+            const btnJaga = document.getElementById('sim-act-jaga');
+            const btnRusak = document.getElementById('sim-act-rusak');
+
+            if (actKey === 'jaga') {
+                btnJaga.className = 'p-3 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-sm transition flex flex-col items-center gap-1 text-center';
+                btnRusak.className = 'p-3 rounded-xl bg-stone-200 text-stone-700 hover:bg-rose-100 hover:text-rose-800 font-bold text-xs transition flex flex-col items-center gap-1 text-center';
+            } else {
+                btnRusak.className = 'p-3 rounded-xl bg-rose-600 text-white font-bold text-xs shadow-sm transition flex flex-col items-center gap-1 text-center';
+                btnJaga.className = 'p-3 rounded-xl bg-stone-200 text-stone-700 hover:bg-emerald-100 hover:text-emerald-800 font-bold text-xs transition flex flex-col items-center gap-1 text-center';
+            }
+            renderSimulationChain();
+        }
+
+        function renderSimulationChain() {
+            const data = simulationScenarios[currentSimScenario];
+            const outcome = data[currentSimAction];
+            const isPositive = currentSimAction === 'jaga';
+
+            document.getElementById('sim-chain-display').innerHTML = `
+                <!-- 1. Masa Lampau -->
+                <div class="p-5 rounded-2xl bg-amber-50 border border-amber-200 flex flex-col justify-between">
+                    <div>
+                        <span class="inline-block text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-amber-200 text-amber-950 mb-2">1. Masa Lampau</span>
+                        <h4 class="font-bold text-sm text-stone-900 mb-2">Sumber Makna & Harapan</h4>
+                        <p class="text-xs text-stone-700 leading-relaxed">${data.past}</p>
+                    </div>
+                    <div class="mt-4 text-[11px] font-semibold text-amber-800">Fondasi Identitas Wilayah</div>
+                </div>
+
+                <!-- 2. Masa Kini -->
+                <div class="p-5 rounded-2xl ${isPositive ? 'bg-sky-50 border-sky-200' : 'bg-orange-50 border-orange-200'} border flex flex-col justify-between">
+                    <div>
+                        <span class="inline-block text-[10px] font-bold uppercase px-2 py-0.5 rounded ${isPositive ? 'bg-sky-200 text-sky-950' : 'bg-orange-200 text-orange-950'} mb-2">2. Masa Kini (Tindakan Kita)</span>
+                        <h4 class="font-bold text-sm text-stone-900 mb-2">${isPositive ? 'Penjaga & Penerus Warisan' : 'Kelalaian Generasi Kini'}</h4>
+                        <p class="text-xs text-stone-700 leading-relaxed">${outcome.present}</p>
+                    </div>
+                    <div class="mt-4 text-[11px] font-semibold ${isPositive ? 'text-sky-800' : 'text-orange-800'}">Pilihan Sikap Hari Ini</div>
+                </div>
+
+                <!-- 3. Masa Depan -->
+                <div class="p-5 rounded-2xl ${isPositive ? 'bg-emerald-50 border-emerald-300' : 'bg-rose-50 border-rose-300'} border-2 flex flex-col justify-between">
+                    <div>
+                        <span class="inline-block text-[10px] font-bold uppercase px-2 py-0.5 rounded ${isPositive ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white'} mb-2">3. Dampak Masa Depan</span>
+                        <h4 class="font-bold text-sm text-stone-900 mb-2">${isPositive ? 'Makna Nama Tetap Nyata!' : 'Makna Nama Terputus!'}</h4>
+                        <p class="text-xs text-stone-700 leading-relaxed">${outcome.future}</p>
+                    </div>
+                    <div class="mt-4 text-[11px] font-bold ${isPositive ? 'text-emerald-800' : 'text-rose-800'}">
+                        ${isPositive ? '✓ Pesan Leluhur Terwujud' : '✕ Nama Tinggal Bunyi Tanpa Jiwa'}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Kuis Evaluasi
+        function answerQuiz(qIndex, optIndex) {
+            if (userAnswers[qIndex] !== null) return; // Sudah dijawab
+            userAnswers[qIndex] = optIndex;
+            renderQuiz();
+
+            const score = userAnswers.reduce((acc, ans, idx) => ans === quizQuestions[idx].answer ? acc + 1 : acc, 0);
+            document.getElementById('quiz-score').textContent = score;
+        }
+
+        function resetQuiz() {
+            userAnswers = new Array(quizQuestions.length).fill(null);
+            document.getElementById('quiz-score').textContent = '0';
+            renderQuiz();
+        }
+
+        function renderQuiz() {
+            document.getElementById('quiz-container').innerHTML = quizQuestions.map((item, qIdx) => {
+                const chosen = userAnswers[qIdx];
+                const isAnswered = chosen !== null;
+                const isCorrect = chosen === item.answer;
+
+                return `
+                    <div class="p-5 rounded-2xl bg-stone-50 border border-stone-200 space-y-3">
+                        <p class="font-bold text-sm text-stone-900">${item.q}</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            ${item.options.map((opt, oIdx) => {
+                                let btnStyle = 'bg-white border-stone-200 text-stone-700 hover:border-amber-500';
+                                if (isAnswered) {
+                                    if (oIdx === item.answer) {
+                                        btnStyle = 'bg-emerald-600 border-emerald-600 text-white font-bold';
+                                    } else if (oIdx === chosen) {
+                                        btnStyle = 'bg-rose-600 border-rose-600 text-white font-bold';
+                                    } else {
+                                        btnStyle = 'bg-stone-100 border-stone-200 text-stone-400';
+                                    }
+                                }
+                                return `
+                                    <button onclick="answerQuiz(${qIdx}, ${oIdx})" ${isAnswered ? 'disabled' : ''} class="text-left p-3 rounded-xl border text-xs transition ${btnStyle}">
+                                        ${opt}
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                        ${isAnswered ? `
+                            <div class="p-3 rounded-xl text-xs ${isCorrect ? 'bg-emerald-100 text-emerald-950' : 'bg-amber-100 text-amber-950'}">
+                                <strong>${isCorrect ? 'Jawaban Benar!' : 'Pembahasan:'}</strong> ${item.explanation}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // =========================================================================
+        // 7. INISIALISASI SAAT HALAMAN DIMUAT
+        // =========================================================================
+        window.addEventListener('DOMContentLoaded', () => {
+            inspectArtifact('yupa');
+            resetChronologyGame();
+            selectEra('praaksara');
+            renderComparisonAspect('tempat');
+            updateBogorTimeline(0);
+            filterToponimi('all');
+            renderSimulationChain();
+            renderQuiz();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
